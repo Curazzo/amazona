@@ -65,7 +65,7 @@ function App() {
               CULT Automotive Shop
             </Link>
           </div>
-          <div>
+          <div className="search">
             <Route
               render={({ history }) => (
                 <SearchBox history={history}></SearchBox>
@@ -241,7 +241,8 @@ function App() {
 
           <Route path="/" component={HomeScreen} exact></Route>
         </main>
-        <footer className="row center">All right reserved</footer>
+        <footer className="row center">All right reserved
+        </footer>
       </div>
     </BrowserRouter>
   );

@@ -19,7 +19,16 @@ mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
   useCreateIndex: true,
 });
 
-
+app.enable('trust proxy');
+app.use (function (req, res, next) {
+  if (req.secure) {
+          // request was via https, so do no special handling
+          next();
+  } else {
+          // request was via http, so redirect to https
+          res.redirect('https://' + req.headers.host + req.url);
+  }
+});
 
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);

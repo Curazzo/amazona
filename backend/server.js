@@ -1,4 +1,5 @@
 import express from 'express';
+import enforce from "express-sslify";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -7,11 +8,14 @@ import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 
+
 dotenv.config();
 
 const app = express();
+app.use(enforce.HTTPS());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
   useNewUrlParser: true,

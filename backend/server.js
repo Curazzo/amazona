@@ -6,8 +6,6 @@ import productRouter from './routers/productRouter.js';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
-import fast from 'fastify'
-const fastify = fast({ logger: true })
 
 dotenv.config();
 
@@ -44,18 +42,7 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
-fastify.addHook('onRequest', async (request, reply) => {
-  if (request.headers['x-forwarded-proto']) {
-      if (request.headers['x-forwarded-proto'] === 'http') {
-          return reply.redirect(`https://${request.headers.host}${request.raw.url}`)
-      }
-  }
-})
-
 const port = process.env.PORT || 5000;
-
-fastify.listen(port, '0.0.0.0')
-
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
 });

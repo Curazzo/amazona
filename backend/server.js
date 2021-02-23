@@ -6,6 +6,8 @@ import productRouter from './routers/productRouter.js';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
+import cors from "cors";
+
 
 dotenv.config();
 
@@ -13,13 +15,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors());
+
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
 });
 
-app.enable('trust proxy');
+if (process.env.NODE_ENV == "production") {
+  app.enable('trust proxy');
 app.use (function (req, res, next) {
   if (req.secure) {
           // request was via https, so do no special handling
@@ -29,6 +34,9 @@ app.use (function (req, res, next) {
           res.redirect('https://' + req.headers.host + req.url);
   }
 });
+}
+
+
 
 app.use('/api/uploads', uploadRouter);
 app.use('/api/users', userRouter);
@@ -57,6 +65,7 @@ app.get('*', (req, res) =>
 
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
+  next();
 });
 
 
